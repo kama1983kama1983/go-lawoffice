@@ -1,0 +1,184 @@
+{{define "content"}}
+            <h1 class="title has-text-centered">تعديل  قضية رقم {{ .caseDetails.CaseID }}</h1>
+            <form method="post" action="/case/add">
+                    <div class="field">
+                        <label class="label">رقم العميل</label>
+                        <div class="control">
+                            <select name="clientID" class="input">
+                                {{range .clients}}
+                                    <option value="{{.id}}" {{if eq .id $.caseDetails.ClientID}}selected{{end}}>{{ .firstname}}{{.lastname}}</option>
+                               {{end}}
+                           </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">رقم المحامي</label>
+                        <div class="control">
+                                <select name="lawyerID" class="input"> <!-- Corrected name from client to lawyer -->
+                                    {{range .lawyers}}
+                                        <option value="{{.id}}" {{if eq .id $.caseDetails.LawyerID}} selected {{end}}>{{ .firstname}}{{.lastname}}</option>
+                                   {{end}}
+                               </select>
+                            </div>
+                    </div>
+                    <div class='field'>
+                        <label class='label'>رقم القضية</label>
+                        <div class='control'>
+                            <input class="input" value="{{.caseDetails.CaseNumber}}" name="CaseNumber" type="text" placeholder="رقم القضية">
+                        </div>
+                    </div>
+                    <div class='field'>
+                            <label class='label'>المحكمة</label>
+                            <div class="control">
+                                 <select class="input" name="Court">
+                                        <option selected="selected" value="">--اختر--</option>
+                                        <option value="مجلس الدولة بفروعها" {{if eq "مجلس الدولة بفروعها"  $.caseDetails.Court}} selected {{end}}>مجلس الدولة بفروعها</option>
+                                        <option value="محكمة شمال القاهرة الابتدائية" {{if eq "محكمة شمال القاهرة الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شمال القاهرة الابتدائية</option>
+                                        <option value="محكمة جنوب القاهرة الابتدائية" {{if eq "محكمة جنوب القاهرة الابتدائية" $.caseDetails.Court}} selected {{end}}> محكمة جنوب القاهرة الابتدائية</option>
+                                        <option value="محكمة شمال الجيزة الابتدائية" {{if eq "محكمة شمال الجيزة الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شمال الجيزة الابتدائية</option>
+                                        <option value="محكمة شرق اسكندرية الابتدائية" {{if eq "محكمة شرق الاسكندرية الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شرق اسكندرية الابتدائية</option>
+                                        <option value="محكمة شمال دمنهور الابتدائية" {{if eq "محكمة شمال دمنهورالابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شمال دمنهور الابتدائية</option>
+                                        <option value="محكمة غرب طنطا الابتدائية"{{if eq "محكمة غرب  طنطا الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة غرب طنطا الابتدائية</option>
+                                        <option value="محكمة الاسماعيلية الابتدائية" {{if eq "محكمة  الاسماعلية الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة الاسماعيلية الابتدائية</option>
+                                        <option value="محكمة جنوب الزقازيق الابتدائية" {{if eq "محكمة جنوب الزقازيق الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة جنوب الزقازيق الابتدائية</option>
+                                        <option value="محكمة جنوب المنصورة الابتدائية" {{if eq "محكمة جنوب المنصورة الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة جنوب المنصورة الابتدائية</option>
+                                        <option value="محكمة السويس الابتدائية" {{if eq "محكمة السويس الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة السويس الابتدائية</option>
+                                        <option value="محكمة كفر الشيخ الابتدائية" {{if eq "محكمة كفر الشيخ الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة كفر الشيخ الابتدائية</option>
+                                        <option value="محكمة شمال بنها الأبتدائية" {{if eq "محكمة شمال بنهاالابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شمال بنها الأبتدائية</option>
+                                        <option value="محكمة شبين الكوم الابتدائية" {{if eq "محكمة الفيوم الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شبين الكوم الابتدائية</option>
+                                        <option value="محكمة الفيوم الابتدائية" {{if eq "محكمة جنوب القاهرة الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة الفيوم الابتدائية</option>
+                                        <option value="محكمة بنى سويف الابتدائية" {{if eq "محكمة بنى سويف الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة بنى سويف الابتدائية</option>
+                                        <option value="محكمة المنيا الابتدائية" {{if eq "محكمة المنيا الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة المنيا الابتدائية</option>
+                                        <option value="محكمة سوهاج الابتدائية" {{if eq "محكمة سوهاج الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة سوهاج الابتدائية</option>
+                                        <option value="محكمة قنا الابتدائية" {{if eq "محكمة قناالابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة قنا الابتدائية</option>
+                                        <option value=" محكمة الاقصر الابتدائية" {{if eq "محكمة الاقصر الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة الاقصر الابتدائية</option>
+                                        <option value="محكمة اسوان الابتدائية" {{if eq "محكمة اسوان الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة اسوان الابتدائية</option>
+                                        <option value="محكمة شمال سيناء الابتدائية" {{if eq "محكمة شمال سيناء الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شمال سيناء الابتدائية</option>
+                                        <option value="محكمة جنوب سيناء الابتدائية" {{if eq "محكمة جنوب سيناء الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة جنوب سيناء الابتدائية</option>
+                                        <option value="محكمة حلوان الابتدائية" {{if eq "محكمة حلوان الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة حلوان الابتدائية</option>
+                                        <option value="محكمة القاهرة الجديدة الابتدائية" {{if eq "محكمة القاهرة الجديدة الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة القاهرة الجديدة الابتدائية</option>
+                                        <option value="محكمة جنوب الجيزة الابتدائية" {{if eq "محكمة جنوب الجيزة الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة جنوب الجيزة الابتدائية</option>
+                                        <option value="محكمة جنوب بنها الأبتدائية" {{if eq "محكمة جنوب بنها الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة جنوب بنها الأبتدائية</option>
+                                        <option value="محكمة شمال الزقازيق الابتدائية" {{if eq "محكمة شمال الزقازيق الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شمال الزقازيق الابتدائية</option>
+                                        <option value="محكمة غرب اسكندرية الابتدائية" {{if eq "محكمة غرب اسكندرية الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة غرب اسكندرية الابتدائية</option>
+                                        <option value="محكمة مرسى مطروح الابتدائية" {{if eq "محكمة مرسى مطروح الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة مرسى مطروح الابتدائية</option>
+                                        <option value="محكمة شرق طنطا الأبتدائية" {{if eq "محكمة شرق طنطا الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة شرق طنطا الأبتدائية</option>
+                                        <option value="محكمة بورسعيد الابتدائية" {{if eq "محكمة بورسعيد الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة بورسعيد الابتدائية</option>
+                                        <option value="محكمة البحر الاحمر الابتدائية" {{if eq "محكمة البحر الاحمر الابتدائية" $.caseDetails.Court}} selected {{end}}> محكمة البحر الاحمر الابتدائية</option>
+                                        <option value="محكمة الوادى الجديد الابتدائية" {{if eq "محكمة الوادى الجديد الابتدائية" $.caseDetails.Court}} selected {{end}}>محكمة الوادى الجديد الابتدائية</option>
+                                 </select>
+                            </div>
+                    </div>                            
+                    <div class="field">
+                            <label class='label'>الدائرة</label>
+                            <div class="control">
+                                 <input type="text" class="input" value="{{ .caseDetails.Dayra}}" name="Dayra">
+                            </div>
+                    </div>                                                   
+                    <div class="field">
+                            <label class='label'>القاعة</label>
+                            <div class="control">
+                                 <input type="text" class="input" value="{{ .caseDetails.Qa3aNum}}"  name="Qa3aNum">
+                            </div>
+                    </div>                                                     
+                    <div class="field">
+                            <label class='label'>الموضوع</label>
+                            <div class="control">
+                                 <input type="text" class="input" value="{{ .caseDetails.Subject}}" name="Subject">
+                            </div>
+                    </div>                                   
+                    <div class="field">
+                            <label class='label'>المدعى عليه</label>
+                            <div class="control">
+                                 <input type="text" class="input" value="{{ .caseDetails.Mod3le}}"  name="Mod3le">
+                            </div>
+                    </div>   
+                    <div class="field">
+                        <label class="label">تاريخ الإيداع</label>
+                            <div class="control">
+                                <input type="text" name="Ed3aDate"  value="{{ .caseDetails.Ed3aDate}}"  class="input">
+                            </div>                       
+                    </div>                    
+                    <div class="field">
+                        <label class="label">نوع القضية</label>
+                        <div class="control">
+                                    <select class="input"   name="CaseType">
+                                            <option value=""  selected>--اختر--</option>
+                                           <option value="القضاء الادارى" {{if eq "القضاء الادارى" $.CaseType}}selected{{end}}>القضاء الادارى</option>
+                                            <option value="مدنى كلى" {{if eq "مدنى كلى" $.CaseType}}selected{{end}}>مدنى كلى</option>
+                                        
+                                            <option value="مدنى حكومة" {{if eq "مدنى حكومة" $.CaseType }}selected{{end}}>مدنى حكومة</option>
+                                        
+                                            <option value="ايجارات" {{if eq "ايجارات" $.CaseType }}selected{{end}}>ايجارات</option>
+                                        
+                                            <option value="تعويضات" {{if eq "تعويضات" $.CaseType }}selected{{end}}>تعويضات</option>
+                                        
+                                            <option value="مدنى مستأنف" {{if eq "مدنى مستأنف" $.CaseType }}selected{{end}}>مدنى مستأنف</option>
+                                        
+                                            <option value="مستأنف مستعجل" {{if eq "مدنى مستعجل" $.CaseType }}selected{{end}}>مستأنف مستعجل</option>
+                                        
+                                            <option value="ضرائب" {{if eq "ضرائب" $.CaseType }}selected{{end}}>ضرائب</option>
+                                        
+                                            <option value="تجارى" {{if eq "تجارى" $.CaseType }}selected{{end}}>تجارى</option>
+                                        
+                                            <option value="اشكال وتنفيذ" {{if eq "اشكال وتنفيذ" $.CaseType }}selected{{end}}>اشكال وتنفيذ</option>
+                                        
+                                            <option value="عمال كلى" {{if eq "عمال كلى " $.CaseType }}selected{{end}}>عمال كلى</option>
+                                        
+                                            <option value="بيئة" {{if eq "بيئة" $.CaseType }}selected{{end}}>بيئة</option>
+                                        
+                                            <option value="بيوع" {{if eq "بيوع" $.CaseType }}selected{{end}}>بيوع</option>
+                                        
+                                            <option value="استثمار" {{if eq "استثمار" $.CaseType }}selected{{end}}>استثمار</option>
+                                        
+                                            <option value="صحة توقيع" {{if eq "صحة توقيع" $.CaseType }}selected{{end}}>صحة توقيع</option>
+                                        
+                                            <option value="افلاس" {{if eq "افلاس" $.CaseType }}selected{{end}}>افلاس</option>
+                                        
+                                            <option value="تجاري تحكيم" {{if eq "تجاري تحكيم" $.CaseType }}selected{{end}}>تجاري تحكيم</option>
+                                        
+                                            <option value="تجاري مستأنف" {{if eq "تجاري مستأنف" $.CaseType }}selected{{end}}>تجاري مستأنف</option>
+                                        
+                                            <option value="تظلمات رسوم" {{if eq "تظلمات رسوم " $.CaseType }}selected{{end}}>تظلمات رسوم</option>
+                                        
+                                            <option value="عمال مستأنف" {{if eq "عمال مستأنف " $.CaseType }}selected{{end}}>عمال مستأنف</option>
+                                        
+                                            <option value="لجنة منازعات عمال" {{if eq "لجنة منازعات عمال" $.CaseType }}selected{{end}}>لجنة منازعات عمال</option>
+                                        
+                                            <option value="طعون ايجارات" {{if eq "طعون ايجارات" $.CaseType }}selected{{end}}>طعون ايجارات</option>
+                                        
+                                            <option value="لجنة معافاه" {{if eq "لجنة معافاة" $.CaseType }}selected{{end}}>لجنة معافاه</option>
+                                        
+                                            <option value="دعاوى وقف" {{if eq "دعاوى وقف" $.CaseType }}selected{{end}}>دعاوى وقف</option>
+                                        
+                                            <option value="لجنة تحسين" {{if eq "لجنة تحسين" $.CaseType }}selected{{end}}>لجنة تحسين</option>
+                                        
+                                            <option value="قوامة" {{if eq "قوامة" $.CaseType }}selected{{end}}>قوامة</option>                                        
+                                        </select>
+                        </div>
+                    </div>
+                    <div class="field">  
+                           <label for="" class="label">الحالة</label>
+                           <div class="control">
+                            <select class="input" name="Status">
+                                    <option {{if eq "مفتوح" $.Status}}selected{{end}}>مفتوح</option>
+                                  <option {{if eq "معلق" $.Status}}selected{{end}}>مغلق</option>
+                                    <option  {{if eq "معلق" $.Status}}selected{{end}}>معلق</option>
+                                    <option  {{if eq "مؤجل" $.Status}}selected{{end}}>مؤجل</option>
+                                </select>
+                            </div>
+                    </div>                    
+                    <div class="field">
+                        <label class="label">الوصف</label>
+                        <div class="control">
+                            <textarea class="textarea"  value="{{ .caseDetails.Description}}"  name="Description" placeholder="الوصف"></textarea>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary">إرسال</button>
+                            <a href="/cases" class="button is-black" style="margin:0px 20px">رجوع للقائمة الرئيسية</a>
+                        </div>
+                    </div>
+                </form>
+                {{end}}

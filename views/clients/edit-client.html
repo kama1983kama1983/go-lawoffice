@@ -1,0 +1,45 @@
+{{define "content"}}
+        <h1 class="title has-text-centered">Clients</h1>
+
+        <form method="post" action="/client/update/{{.ClientID}}" class="box">
+            <div class="field">
+                <label class="label">First Name</label>
+                <div class="control">
+                    <input class="input" value="{{ .FirstName}}" type="text" name="first_name" placeholder="First Name" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Last Name</label>
+                <div class="control">
+                    <input class="input"  value="{{ .LastName}}" type="text" name="last_name" placeholder="Last Name" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input"  value="{{ .Email}}" type="email" name="email" placeholder="Email" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Phone</label>
+                <div class="control">
+                    <input class="input"  value="{{ .Phone}}" type="text" name="phone" placeholder="Phone" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Address</label>
+                <div class="control">
+                    <input class="input" value="{{ .Address}}" type="text" name="address" placeholder="Address" required>
+                </div>
+            </div>
+            <div class="buttons">
+                <div class="control">
+                    <button class="button is-primary">Submit</button>
+                </div>
+               <div class="control" style="margin:0px 20px; display:inline;">
+                   <a  href="/clients" class="button is-black"  >Back</a>
+              </div>
+        </form>
+
+        </div>
+{{end}}

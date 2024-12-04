@@ -1,0 +1,140 @@
+{{define "content"}}
+            <h1 class="title">مواعيد العملاء</h1>
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input" type="text" id="searchInput" placeholder="Search appointments...">
+                    <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th>رقم المسلسل</th>
+                        <th>العميل</th>
+                        <th>المحامى</th>
+                        <th>معياد و تاريخ العميل</th>
+                        <th>مكان المقابلة</th>
+                        <th>ملاحظات</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="appointmentsTable">
+                    <!-- Appointment rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <nav class="pagination" role="navigation" aria-label="pagination">
+                <a class="pagination-previous" id="prevPage">Previous</a>
+                <a class="pagination-next" id="nextPage">Next page</a>
+                <ul class="pagination-list" id="paginationList">
+                    <!-- Pagination items will be inserted here by JavaScript -->
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <script>
+        const appointments = [
+            { id: 1, clientId: 1, lawyerId: 1, appointmentDate: '2023-10-01 10:00', location: 'Office 1', notes: 'Initial consultation' },
+            { id: 2, clientId: 2, lawyerId: 2, appointmentDate: '2023-10-02 11:00', location: 'Office 2', notes: 'Follow-up meeting' },
+            { id: 3, clientId: 3, lawyerId: 3, appointmentDate: '2023-10-03 12:00', location: 'Office 3', notes: 'Case discussion' },
+            { id: 4, clientId: 4, lawyerId: 4, appointmentDate: '2023-10-04 13:00', location: 'Office 4', notes: 'Strategy planning' },
+            { id: 5, clientId: 5, lawyerId: 5, appointmentDate: '2023-10-05 14:00', location: 'Office 5', notes: 'Client briefing' },
+            { id: 6, clientId: 6, lawyerId: 6, appointmentDate: '2023-10-06 15:00', location: 'Office 6', notes: 'Document review' },
+            { id: 7, clientId: 7, lawyerId: 7, appointmentDate: '2023-10-07 16:00', location: 'Office 7', notes: 'Witness preparation' },
+            { id: 8, clientId: 8, lawyerId: 8, appointmentDate: '2023-10-08 17:00', location: 'Office 8', notes: 'Settlement discussion' },
+            { id: 9, clientId: 9, lawyerId: 9, appointmentDate: '2023-10-09 18:00', location: 'Office 9', notes: 'Court preparation' },
+            { id: 10, clientId: 10, lawyerId: 10, appointmentDate: '2023-10-10 19:00', location: 'Office 10', notes: 'Final review' },
+            { id: 11, clientId: 11, lawyerId: 11, appointmentDate: '2023-10-11 10:00', location: 'Office 11', notes: 'Initial consultation' },
+            { id: 12, clientId: 12, lawyerId: 12, appointmentDate: '2023-10-12 11:00', location: 'Office 12', notes: 'Follow-up meeting' },
+            { id: 13, clientId: 13, lawyerId: 13, appointmentDate: '2023-10-13 12:00', location: 'Office 13', notes: 'Case discussion' },
+            { id: 14, clientId: 14, lawyerId: 14, appointmentDate: '2023-10-14 13:00', location: 'Office 14', notes: 'Strategy planning' },
+            { id: 15, clientId: 15, lawyerId: 15, appointmentDate: '2023-10-15 14:00', location: 'Office 15', notes: 'Client briefing' },
+            { id: 16, clientId: 16, lawyerId: 16, appointmentDate: '2023-10-16 15:00', location: 'Office 16', notes: 'Document review' },
+            { id: 17, clientId: 17, lawyerId: 17, appointmentDate: '2023-10-17 16:00', location: 'Office 17', notes: 'Witness preparation' },
+            { id: 18, clientId: 18, lawyerId: 18, appointmentDate: '2023-10-18 17:00', location: 'Office 18', notes: 'Settlement discussion' }
+        ];
+
+        const rowsPerPage = 5;
+        let currentPage = 1;
+
+        function displayAppointments(appointments, page = 1) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedAppointments = appointments.slice(start, end);
+
+            const appointmentsTable = document.getElementById('appointmentsTable');
+            appointmentsTable.innerHTML = '';
+
+            paginatedAppointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${appointment.id}</td>
+                    <td>${appointment.clientId}</td>
+                    <td>${appointment.lawyerId}</td>
+                    <td>${appointment.appointmentDate}</td>
+                    <td>${appointment.location}</td>
+                    <td>${appointment.notes}</td>
+                    <td>
+                        <button class="button is-small is-info">Edit</button>
+                        <button class="button is-small is-danger">Delete</button>
+                    </td>
+                `;
+                appointmentsTable.appendChild(row);
+            });
+
+            updatePagination(appointments.length, page);
+        }
+
+        function updatePagination(totalItems, currentPage) {
+            const totalPages = Math.ceil(totalItems / rowsPerPage);
+            const paginationList = document.getElementById('paginationList');
+            paginationList.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.innerHTML = `<a class="pagination-link ${i === currentPage ? 'is-current' : ''}" data-page="${i}">${i}</a>`;
+                paginationList.appendChild(pageItem);
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredAppointments = appointments.filter(appointment => {
+                return (
+                    appointment.appointmentDate.toLowerCase().includes(searchTerm) ||
+                    appointment.location.toLowerCase().includes(searchTerm) ||
+                    appointment.notes.toLowerCase().includes(searchTerm)
+                );
+            });
+            displayAppointments(filteredAppointments, 1);
+        });
+
+        document.getElementById('paginationList').addEventListener('click', function(event) {
+            if (event.target.classList.contains('pagination-link')) {
+                const page = parseInt(event.target.getAttribute('data-page'));
+                currentPage = page;
+                displayAppointments(appointments, currentPage);
+            }
+        });
+
+        document.getElementById('prevPage').addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayAppointments(appointments, currentPage);
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', function() {
+            const totalPages = Math.ceil(appointments.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayAppointments(appointments, currentPage);
+            }
+        });
+
+        // Initial display
+        displayAppointments(appointments, currentPage);
+    </script>
+{{end}}

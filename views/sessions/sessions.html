@@ -1,0 +1,138 @@
+{{define "content"}}
+            <h1 class="title">Sessions</h1>
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input" type="text" id="searchInput" placeholder="Search sessions...">
+                    <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Case ID</th>
+                        <th>QRAR</th>
+                        <th>Next Date</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="sessionsTable">
+                    <!-- Session rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <nav class="pagination" role="navigation" aria-label="pagination">
+                <a class="pagination-previous" id="prevPage">Previous</a>
+                <a class="pagination-next" id="nextPage">Next page</a>
+                <ul class="pagination-list" id="paginationList">
+                    <!-- Pagination items will be inserted here by JavaScript -->
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <script>
+        const sessions = [
+            { id: 1, caseId: 1, qrar: 'QRAR001', nextDate: '2023-10-01', description: 'Session description 1' },
+            { id: 2, caseId: 2, qrar: 'QRAR002', nextDate: '2023-10-02', description: 'Session description 2' },
+            { id: 3, caseId: 3, qrar: 'QRAR003', nextDate: '2023-10-03', description: 'Session description 3' },
+            { id: 4, caseId: 4, qrar: 'QRAR004', nextDate: '2023-10-04', description: 'Session description 4' },
+            { id: 5, caseId: 5, qrar: 'QRAR005', nextDate: '2023-10-05', description: 'Session description 5' },
+            { id: 6, caseId: 6, qrar: 'QRAR006', nextDate: '2023-10-06', description: 'Session description 6' },
+            { id: 7, caseId: 7, qrar: 'QRAR007', nextDate: '2023-10-07', description: 'Session description 7' },
+            { id: 8, caseId: 8, qrar: 'QRAR008', nextDate: '2023-10-08', description: 'Session description 8' },
+            { id: 9, caseId: 9, qrar: 'QRAR009', nextDate: '2023-10-09', description: 'Session description 9' },
+            { id: 10, caseId: 10, qrar: 'QRAR010', nextDate: '2023-10-10', description: 'Session description 10' },
+            { id: 11, caseId: 11, qrar: 'QRAR011', nextDate: '2023-10-11', description: 'Session description 11' },
+            { id: 12, caseId: 12, qrar: 'QRAR012', nextDate: '2023-10-12', description: 'Session description 12' },
+            { id: 13, caseId: 13, qrar: 'QRAR013', nextDate: '2023-10-13', description: 'Session description 13' },
+            { id: 14, caseId: 14, qrar: 'QRAR014', nextDate: '2023-10-14', description: 'Session description 14' },
+            { id: 15, caseId: 15, qrar: 'QRAR015', nextDate: '2023-10-15', description: 'Session description 15' },
+            { id: 16, caseId: 16, qrar: 'QRAR016', nextDate: '2023-10-16', description: 'Session description 16' },
+            { id: 17, caseId: 17, qrar: 'QRAR017', nextDate: '2023-10-17', description: 'Session description 17' },
+            { id: 18, caseId: 18, qrar: 'QRAR018', nextDate: '2023-10-18', description: 'Session description 18' }
+        ];
+
+        const rowsPerPage = 5;
+        let currentPage = 1;
+
+        function displaySessions(sessions, page = 1) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedSessions = sessions.slice(start, end);
+
+            const sessionsTable = document.getElementById('sessionsTable');
+            sessionsTable.innerHTML = '';
+
+            paginatedSessions.forEach(session => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${session.id}</td>
+                    <td>${session.caseId}</td>
+                    <td>${session.qrar}</td>
+                    <td>${session.nextDate}</td>
+                    <td>${session.description}</td>
+                    <td>
+                        <button class="button is-small is-info">Edit</button>
+                        <button class="button is-small is-danger">Delete</button>
+                    </td>
+                `;
+                sessionsTable.appendChild(row);
+            });
+
+            updatePagination(sessions.length, page);
+        }
+
+        function updatePagination(totalItems, currentPage) {
+            const totalPages = Math.ceil(totalItems / rowsPerPage);
+            const paginationList = document.getElementById('paginationList');
+            paginationList.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.innerHTML = `<a class="pagination-link ${i === currentPage ? 'is-current' : ''}" data-page="${i}">${i}</a>`;
+                paginationList.appendChild(pageItem);
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredSessions = sessions.filter(session => {
+                return (
+                    session.qrar.toLowerCase().includes(searchTerm) ||
+                    session.nextDate.toLowerCase().includes(searchTerm) ||
+                    session.description.toLowerCase().includes(searchTerm)
+                );
+            });
+            displaySessions(filteredSessions, 1);
+        });
+
+        document.getElementById('paginationList').addEventListener('click', function(event) {
+            if (event.target.classList.contains('pagination-link')) {
+                const page = parseInt(event.target.getAttribute('data-page'));
+                currentPage = page;
+                displaySessions(sessions, currentPage);
+            }
+        });
+
+        document.getElementById('prevPage').addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                displaySessions(sessions, currentPage);
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', function() {
+            const totalPages = Math.ceil(sessions.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displaySessions(sessions, currentPage);
+            }
+        });
+
+        // Initial display
+        displaySessions(sessions, currentPage);
+    </script>
+{{end}}

@@ -1,0 +1,190 @@
+{{define "content"}}
+            <h1 class="title has-text-centered">إضافة قضية</h1>
+            <form method="post" action="/case/add">
+                    <div class="field">
+                        <label class="label">رقم العميل</label>
+                        <div class="control">
+                            <select name="clientID" class="input">
+                                {{range .clients}}
+                                    <option value="{{.id}}">{{ .firstname}}{{.lastname}}</option>
+                               {{end}}
+                           </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">رقم المحامي</label>
+                        <div class="control">
+                                <select name="lawyerID" class="input"> <!-- Corrected name from client to lawyer -->
+                                    {{range .lawyers}}
+                                        <option value="{{.id}}">{{ .firstname}}{{.lastname}}</option>
+                                   {{end}}
+                               </select>
+                            </div>
+                    </div>
+                    <div class='field'>
+                        <label class='label'>رقم القضية</label>
+                        <div class='control'>
+                            <input class="input" name="CaseNumber" type="text" placeholder="رقم القضية">
+                        </div>
+                    </div>
+                    <div class='field'>
+                            <label class='label'>المحكمة</label>
+                            <div class="control">
+                                 <select class="input" name="Court">
+                                        <option selected="selected" value="">--اختر--</option>
+                                        <option value="مجلس الدولة بفروعها">مجلس الدولة بفروعها</option>
+                                        <option value="محكمة شمال القاهرة الابتدائية">محكمة شمال القاهرة الابتدائية</option>
+                                        <option value="محكمة جنوب القاهرة الابتدائية">محكمة جنوب القاهرة الابتدائية</option>
+                                        <option value="محكمة شمال الجيزة الابتدائية">محكمة شمال الجيزة الابتدائية</option>
+                                        <option value="محكمة شرق اسكندرية الابتدائية">محكمة شرق اسكندرية الابتدائية</option>
+                                        <option value="محكمة شمال دمنهور الابتدائية">محكمة شمال دمنهور الابتدائية</option>
+                                        <option value="محكمة غرب طنطا الابتدائية">محكمة غرب طنطا الابتدائية</option>
+                                        <option value="محكمة الاسماعيلية الابتدائية">محكمة الاسماعيلية الابتدائية</option>
+                                        <option value="محكمة جنوب الزقازيق الابتدائية">محكمة جنوب الزقازيق الابتدائية</option>
+                                        <option value="محكمة جنوب المنصورة الابتدائية">محكمة جنوب المنصورة الابتدائية</option>
+                                        <option value="محكمة السويس الابتدائية">محكمة السويس الابتدائية</option>
+                                        <option value="محكمة كفر الشيخ الابتدائية">محكمة كفر الشيخ الابتدائية</option>
+                                        <option value="محكمة شمال بنها الأبتدائية">محكمة شمال بنها الأبتدائية</option>
+                                        <option value="محكمة شبين الكوم الابتدائية">محكمة شبين الكوم الابتدائية</option>
+                                        <option value="محكمة الفيوم الابتدائية">محكمة الفيوم الابتدائية</option>
+                                        <option value="محكمة بنى سويف الابتدائية">محكمة بنى سويف الابتدائية</option>
+                                        <option value="محكمة المنيا الابتدائية">محكمة المنيا الابتدائية</option>
+                                        <option value="محكمة سوهاج الابتدائية">محكمة سوهاج الابتدائية</option>
+                                        <option value="محكمة قنا الابتدائية">محكمة قنا الابتدائية</option>
+                                        <option value=" محكمة الاقصر الابتدائية">محكمة الاقصر الابتدائية</option>
+                                        <option value="محكمة اسوان الابتدائية">محكمة اسوان الابتدائية</option>
+                                        <option value="محكمة شمال سيناء الابتدائية">محكمة شمال سيناء الابتدائية</option>
+                                        <option value="محكمة جنوب سيناء الابتدائية">محكمة جنوب سيناء الابتدائية</option>
+                                        <option value="محكمة حلوان الابتدائية">محكمة حلوان الابتدائية</option>
+                                        <option value="محكمة القاهرة الجديدة الابتدائية">محكمة القاهرة الجديدة الابتدائية</option>
+                                        <option value="محكمة جنوب الجيزة الابتدائية">محكمة جنوب الجيزة الابتدائية</option>
+                                        <option value="محكمة جنوب بنها الأبتدائية">محكمة جنوب بنها الأبتدائية</option>
+                                        <option value="محكمة شمال الزقازيق الابتدائية">محكمة شمال الزقازيق الابتدائية</option>
+                                        <option value="محكمة غرب اسكندرية الابتدائية">محكمة غرب اسكندرية الابتدائية</option>
+                                        <option value="محكمة مرسى مطروح الابتدائية">محكمة مرسى مطروح الابتدائية</option>
+                                        <option value="محكمة شرق طنطا الأبتدائية">محكمة شرق طنطا الأبتدائية</option>
+                                        <option value="محكمة بورسعيد الابتدائية">محكمة بورسعيد الابتدائية</option>
+                                        <option value="محكمة البحر الاحمر الابتدائية">محكمة البحر الاحمر الابتدائية</option>
+                                        <option value="محكمة الوادى الجديد الابتدائية">محكمة الوادى الجديد الابتدائية</option>
+                                        
+                                 </select>
+                            </div>
+                    </div>                            
+                    <div class="field">
+                            <label class='label'>الدائرة</label>
+                            <div class="control">
+                                 <input type="text" class="input" name="Dayra">
+                            </div>
+                    </div>                                                   
+                    <div class="field">
+                            <label class='label'>القاعة</label>
+                            <div class="control">
+                                 <input type="text" class="input" name="Qa3aNum">
+                            </div>
+                    </div>                                                     
+                    <div class="field">
+                            <label class='label'>الموضوع</label>
+                            <div class="control">
+                                 <input type="text" class="input" name="Subject">
+                            </div>
+                    </div>                                   
+                    <div class="field">
+                            <label class='label'>المدعى عليه</label>
+                            <div class="control">
+                                 <input type="text" class="input" name="Mod3le">
+                            </div>
+                    </div>   
+                    <div class="field">
+                        <label class="label">تاريخ الإيداع</label>
+                            <div class="control">
+                                <input type="date" name="Ed3aDate" class="input">
+                            </div>                       
+                    </div>                    
+                    <div class="field">
+                        <label class="label">نوع القضية</label>
+                        <div class="control">
+                                    <select class="input" name="CaseType">
+                                            <option value=""  selected>--اختر--</option>
+                                           <option value="القضاء الادارى">القضاء الادارى</option>
+                                            <option value="مدنى كلى">مدنى كلى</option>
+                                        
+                                            <option value="مدنى حكومة">مدنى حكومة</option>
+                                        
+                                            <option value="ايجارات">ايجارات</option>
+                                        
+                                            <option value="تعويضات">تعويضات</option>
+                                        
+                                            <option value="مدنى مستأنف">مدنى مستأنف</option>
+                                        
+                                            <option value="مستأنف مستعجل">مستأنف مستعجل</option>
+                                        
+                                            <option value="ضرائب">ضرائب</option>
+                                        
+                                            <option value="تجارى">تجارى</option>
+                                        
+                                            <option value="اشكال وتنفيذ">اشكال وتنفيذ</option>
+                                        
+                                            <option value="عمال كلى">عمال كلى</option>
+                                        
+                                            <option value="بيئة">بيئة</option>
+                                        
+                                            <option value="بيوع">بيوع</option>
+                                        
+                                            <option value="استثمار">استثمار</option>
+                                        
+                                            <option value="صحة توقيع">صحة توقيع</option>
+                                        
+                                            <option value="افلاس">افلاس</option>
+                                        
+                                            <option value="تجاري تحكيم">تجاري تحكيم</option>
+                                        
+                                            <option value="تجاري مستأنف">تجاري مستأنف</option>
+                                        
+                                            <option value="تظلمات رسوم">تظلمات رسوم</option>
+                                        
+                                            <option value="عمال مستأنف">عمال مستأنف</option>
+                                        
+                                            <option value="لجنة منازعات عمال">لجنة منازعات عمال</option>
+                                        
+                                            <option value="طعون ايجارات">طعون ايجارات</option>
+                                        
+                                            <option value="لجنة معافاه">لجنة معافاه</option>
+                                        
+                                            <option value="دعاوى وقف">دعاوى وقف</option>
+                                        
+                                            <option value="لجنة تحسين">لجنة تحسين</option>
+                                        
+                                            <option value="قوامة">قوامة</option>                                        
+                                        </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">الحالة</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="Status">
+                                    <option>مفتوح</option>
+                                    <option>مغلق</option>
+                                    <option>معلق</option>
+                                    <option>مؤجل</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">الوصف</label>
+                        <div class="control">
+                            <textarea class="textarea" name="Description" placeholder="الوصف"></textarea>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{if and (gt .lcount 0) (gt .ccount 0)}}
+                            <button class="button is-primary">إرسال</button>
+                            {{else}}
+                                     يرجى إدخال بيانات المحامين والعملاء
+                            {{end}}
+                        </div>
+                    </div>
+                </form>
+   {{end}}

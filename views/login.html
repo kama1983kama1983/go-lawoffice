@@ -1,0 +1,174 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulma CSS Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style>
+        .sidebar {
+            width: 250px;
+            background-color: #363636;
+            color: white;
+            position: fixed;
+            height: 100%;
+            transition: width 0.3s;
+        }
+        .sidebar a {
+            color: white;
+        }
+        .sidebar .menu-label {
+            color: #b5b5b5;
+        }
+        .sidebar.collapsed {
+            width: 0;
+            overflow: hidden;
+        }
+        .main-content {
+            margin-left: 250px;
+            transition: margin-left 0.3s;
+        }
+        .main-content.collapsed {
+            margin-left: 0;
+        }
+        .navbar {
+            background-color: #00d1b2;
+        }
+        .navbar .navbar-brand .navbar-item {
+            color: white;
+        }
+        .fadeout {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s, opacity 0.3s;
+            opacity: 0;
+        }
+        .fadein {
+            max-height: 1000px; /* Arbitrary large value to ensure full height */
+            opacity: 1;
+        }
+        .login-container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-box {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h1 class="title has-text-centered">Login</h1>
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                    <input class="input" type="text" id="username" placeholder="Enter your username">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                    <input class="input" type="password" id="password" placeholder="Enter your password">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary is-fullwidth" id="loginButton">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardPage" style="display: none;">
+        <div class="navbar">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="#">
+                    <i class="fas fa-bars" id="sidebarToggle"></i>
+                </a>
+                <a class="navbar-item" href="#">
+                    Dashboard
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <aside class="menu">
+                <p class="menu-label">
+                    General
+                </p>
+                <ul class="menu-list">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Customers</a></li>
+                </ul>
+                <p class="menu-label">
+                    Administration
+                </p>
+                <ul class="menu-list">
+                    <li><a href="#">Team Settings</a></li>
+                    <li>
+                        <a href="#" id="manageTeamToggle">Manage Your Team</a>
+                        <ul id="manageTeam" class="fadeout">
+                            <li><a href="#">Members</a></li>
+                            <li><a href="#">Plugins</a></li>
+                            <li><a href="#">Add a member</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Invitations</a></li>
+                    <li><a href="#">Cloud Storage Environment Settings</a></li>
+                    <li><a href="#">Authentication</a></li>
+                </ul>
+                <p class="menu-label">
+                    Transactions
+                </p>
+                <ul class="menu-list">
+                    <li><a href="#">Payments</a></li>
+                    <li><a href="#">Transfers</a></li>
+                    <li><a href="#">Balance</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <div class="main-content" id="mainContent">
+            <section class="section">
+                <div class="container">
+                    <h1 class="title">Dashboard</h1>
+                    <p class="subtitle">Welcome to your dashboard!</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginButton').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === 'admin') {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'block';
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('mainContent').classList.toggle('collapsed');
+        });
+
+        document.getElementById('manageTeamToggle').addEventListener('click', function() {
+            const manageTeam = document.getElementById('manageTeam');
+            if (manageTeam.classList.contains('fadeout')) {
+                manageTeam.classList.remove('fadeout');
+                manageTeam.classList.add('fadein');
+            } else {
+                manageTeam.classList.remove('fadein');
+                manageTeam.classList.add('fadeout');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+{{define "content"}}
+            <h1 class="title">Clients</h1>
+            <div class="field"> <a href="/client/create" class="button is-primary" >Add New Record </a></div>
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input" type="text" id="searchInput" onkeypress="searchClients()" placeholder="Search clients...">
+                    <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientsTable">
+                    <!-- Client rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <nav id="pagination" class="pagination" role="navigation" aria-label="pagination">
+                <a class="pagination-previous" id="prevPage">Previous</a>
+                <a class="pagination-next" id="nextPage">Next page</a>
+                <ul class="pagination-list" id="paginationList">
+                    <!-- Pagination items will be inserted here by JavaScript -->
+                </ul>
+            </nav>
+        </div>
+    </section>
+<script>
+
+const url = '/clients/api'; // Define your API URL
+let allClients = []; // Store all clients globally
+let currentPage = 1; // Current page number
+const clientsPerPage = 5; // Number of clients to display per page
+
+async function fetchClients() {
+    try {
+        const response = await axios.get(url); // Fetch clients from the API
+        allClients = response.data; // Store the fetched clients globally
+        console.log(allClients);
+        displayClients(allClients); // Display all clients initially
+        setupPagination(allClients.length); // Setup pagination based on the total number of clients
+    } catch (error) {
+        console.error('Error fetching clients:', error);
+    }
+}
+
+function displayClients(clients) {
+    const tbody = document.getElementById('clientsTable');
+    tbody.innerHTML = ''; // Clear existing rows
+
+    // Calculate the start and end index for the current page
+    const startIndex = (currentPage - 1) * clientsPerPage;
+    const endIndex = Math.min(startIndex + clientsPerPage, clients.length);
+    
+    // Loop through clients for the current page and create a row for each
+    for (let i = startIndex; i < endIndex; i++) {
+        const client = clients[i];
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${client.client_id}</td>
+            <td>${client.first_name}</td>
+            <td>${client.last_name}</td>
+            <td>${client.email}</td>
+            <td>${client.phone}</td>                                
+            <td>${client.address}</td>
+            <td>
+                <a href="/client/edit/${client.client_id}" class="button is-primary">Edit</a>
+                <a href="/client/delete/${client.client_id}" onclick="return confirm('Are You Delete Me?');" class="button is-danger">Delete</a>
+            </td>
+        `;
+        tbody.appendChild(row); // Append the row to the tbody
+    }
+}
+
+function setupPagination(totalClients) {
+    const paginationDiv = document.getElementById('pagination');
+    paginationDiv.innerHTML = ''; // Clear existing pagination
+
+    const totalPages = Math.ceil(totalClients / clientsPerPage); // Calculate total pages
+
+    // Create pagination buttons
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.innerText = i;
+        button.className = 'button';
+        button.onclick = () => {
+            currentPage = i; // Update current page
+            displayClients(allClients); // Display clients for the current page
+        };
+        paginationDiv.appendChild(button); // Append button to pagination div
+    }
+}
+
+function searchClients() {
+    const query = document.getElementById('searchInput').value.toLowerCase(); // Get the search query
+    const filteredClients = allClients.filter(client => {
+        return (
+            (client.first_name && client.first_name.toLowerCase().includes(query)) ||
+            (client.last_name && client.last_name.toLowerCase().includes(query)) ||
+            (client.email && client.email.toLowerCase().includes(query)) ||
+            (client.phone && client.phone.toLowerCase().includes(query)) ||
+            (client.address && client.address.toLowerCase().includes(query))
+        );
+    });
+    
+    currentPage = 1; // Reset to the first page when searching
+    displayClients(filteredClients); // Display filtered clients
+    setupPagination(filteredClients.length); // Setup pagination for filtered clients
+}
+
+// Call the function to fetch and load clients
+fetchClients();
+</script>
+{{end}}

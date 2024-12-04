@@ -1,0 +1,46 @@
+{{define "content"}}
+      <form method="post" action="/invoice/add">
+                    <div class="field">
+                        <label class="label">Client ID</label>
+                        <div class="control">
+                            <input class="input" type="number" placeholder="Client ID">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Case ID</label>
+                        <div class="control">
+                            <input class="input" type="number" placeholder="Case ID">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Amount</label>
+                        <div class="control">
+                            <input class="input" type="number" step="0.01" placeholder="Amount">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Status</label>
+                        <div class="control">
+                            <div class="select">
+                                <select>
+                                    <option>Paid</option>
+                                    <option>Unpaid</option>
+                                    <option>Overdue</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Due Date</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Due Date">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+{{end}}

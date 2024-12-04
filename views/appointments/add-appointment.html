@@ -1,0 +1,40 @@
+{{define "content"}}
+    <h1 class="title">أضافة ميعاد جديد</h1>    
+   <form method="post" action="/appoinment/create">
+    <div class="field">
+        <label class="label">العميل :</label>
+        <div class="control">
+            <input class="input" type="number" placeholder="Client ID">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">المحامى</label>
+        <div class="control">
+            <input class="input" type="number" placeholder="Lawyer ID">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">معياد المقابلة</label>
+        <div class="control">
+            <input class="input" type="datetime-local">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">مكان المقابلة</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="Location">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">ملاحظات</label>
+        <div class="control">
+            <textarea class="textarea" placeholder="Notes"></textarea>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <button class="button is-primary">أضافة</button>
+        </div>
+    </div>
+    </form>
+{{end}}

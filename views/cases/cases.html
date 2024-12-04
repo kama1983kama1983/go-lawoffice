@@ -1,0 +1,140 @@
+{{define "content"}}
+            <h1 class="title">القضايا</h1>
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input" type="text" id="searchInput" placeholder="ابحث عن القضايا...">
+                    <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <a href="/case/create" class="button is-primary">إضافة قضية</a>
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>رقم العميل</th>
+                        <th>رقم المحامي</th>
+                        <th>رقم القضية</th>
+                        <th>نوع القضية</th>
+                        <th>الحالة</th>
+                        <th>وصف القضية</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="casesTable">
+                    <!-- Case rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <nav class="pagination" role="navigation" aria-label="pagination">
+                <a class="pagination-previous" id="prevPage">السابق</a>
+                <a class="pagination-next" id="nextPage">التالي</a>
+                <ul class="pagination-list" id="paginationList">
+                    <!-- Pagination items will be inserted here by JavaScript -->
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <script>
+        const url = "/cases/api";
+        let allCases = []; // Store all cases globally
+        let currentPage = 1; // Current page number
+        const casesPerPage = 5; // Number of cases to display per page
+
+        async function fetchCases() {
+            try {
+                const response = await axios.get(url); // Fetch cases from the API
+                allCases = response.data; // Store the fetched cases globally
+                displayCases(allCases); // Display all cases initially
+                setupPagination(allCases.length); // Setup pagination based on the total number of cases
+            } catch (error) {
+                console.error('Error fetching cases:', error);
+            }
+        }
+
+        function displayCases(cases, page = 1) {
+            const start = (page - 1) * casesPerPage;
+            const end = start + casesPerPage;
+            const paginatedCases = cases.slice(start, end);
+
+            const casesTable = document.getElementById('casesTable');
+            casesTable.innerHTML = '';
+
+            paginatedCases.forEach(caseItem => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${caseItem.case_id}</td>
+                    <td>${caseItem.client_id}</td>
+                    <td>${caseItem.lawyer_id}</td>
+                    <td>${caseItem.case_number}</td>
+                    <td>${caseItem.case_type}</td>
+                    <td>${caseItem.status}</td>
+                    <td>${caseItem.description}</td>
+                    <td>
+                        <a href="/case/edit/${caseItem.case_id}" class="button is-small is-info">تعديل</a>
+                        <a href="/case/delete/${caseItem.case_id}"  class="button is-small is-danger">حذف</a>
+                    </td>
+                `;
+                casesTable.appendChild(row);
+            });
+
+            updatePagination(cases.length, page);
+        }
+
+        function updatePagination(totalItems, currentPage) {
+            const totalPages = Math.ceil(totalItems / casesPerPage);
+            const paginationList = document.getElementById('paginationList');
+            paginationList.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.innerHTML = `<a class="pagination-link ${i === currentPage ? 'is-current' : '' }" data-page="${i}">${i}</a>`;
+                paginationList.appendChild(pageItem);
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredCases = allCases.filter(caseItem => {
+                return (
+                    caseItem.case_number.toLowerCase().includes(searchTerm) ||
+                    caseItem.case_type.toLowerCase().includes(searchTerm) ||
+                    caseItem.court.toLowerCase().includes(searchTerm) || 
+                    caseItem.dayra.toLowerCase().includes(searchTerm) ||                     
+                    caseItem.subject.toLowerCase().includes(searchTerm) ||
+                    caseItem.mod3le.toLowerCase().includes(searchTerm) ||
+                    caseItem.status.toLowerCase().includes(searchTerm) ||
+                    caseItem.description.toLowerCase().includes(searchTerm)
+                );
+            });
+            displayCases(filteredCases, 1);
+        });
+
+        document.getElementById('paginationList').addEventListener('click', function(event) {
+            if (event.target.classList.contains('pagination-link')) {
+                const page = parseInt(event.target.getAttribute('data-page'));
+                currentPage = page;
+                displayCases(allCases, currentPage);
+            }
+        });
+
+        document.getElementById('prevPage').addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayCases(allCases, currentPage);
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', function() {
+            const totalPages = Math.ceil(allCases.length / casesPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayCases(allCases, currentPage);
+            }
+        });
+
+        // Initial display
+        fetchCases(); // Call fetchCases to load data on page load
+    </script>
+    {{end}}

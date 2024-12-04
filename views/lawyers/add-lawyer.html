@@ -1,0 +1,40 @@
+{{define "content" }}
+<h1 class="title has-text-centered">إضافة المحامى</h1>
+<form method="post" action="/lawyer/add">
+    <div class="field">
+        <label class="label">اسم الاول</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="First Name">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">الاسم الاخير</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="Last Name">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">الايميل</label>
+        <div class="control">
+            <input class="input" type="email" placeholder="Email">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">التليفون</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="Phone">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">درجة التقاضى</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="Specialization">
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <button class="button is-primary">Submit</button>
+        </div>
+    </div>
+</form>
+{{end}}

@@ -1,0 +1,228 @@
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اللوحة الرئيسية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style>
+        .sidebar {
+            width: 250px;
+            background-color: #363636;
+            color: white;
+            position: fixed;
+            height: 100%;
+            transition: width 0.3s;
+            right: 0; /* Align sidebar to the right */
+        }
+        .sidebar a {
+            color: white;
+        }
+        .sidebar .menu-label {
+            color: #b5b5b5;
+        }
+        .sidebar.collapsed {
+            width: 0;
+            overflow: hidden;
+        }
+        .main-content {
+            margin-right: 250px; /* Adjust margin for RTL */
+            transition: margin-right 0.3s;
+        }
+        .main-content.collapsed {
+            margin-right: 0;
+        }
+        .navbar {
+            background-color: #00d1b2;
+        }
+        .navbar .navbar-brand .navbar-item {
+            color: white;
+        }
+        .fadeout {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s, opacity 0.3s;
+            opacity: 0;
+        }
+        .fadein {
+            max-height: 1000px; /* Arbitrary large value to ensure full height */
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <i class="fas fa-bars" id="sidebarToggle"></i>
+            </a>
+            <a class="navbar-item" href="/">
+                اللوحة الرئيسية
+            </a>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <aside class="menu">
+            <h2 style="margin-bottom:15px;font-size:1.3em;font-family:Arial, Helvetica, sans-serif">
+                عام
+            </h2>
+            <ul class="menu-list">
+                <li><a href="/" class="button is-black" style="text-align:right">اللوحة الرئيسية</a><ul></ul></li>
+                <li><a href="/settings" class="button is-black" style="text-align:right">إعدادات عامة</a></li>
+            </ul>
+            <h2 style="margin-bottom:15px;font-size:1.3em;font-family:Arial, Helvetica, sans-serif">
+                الادارة
+            </h2>
+            <ul class="menu-list">
+                <li><a href="/users" class="button is-black" style="text-align:right">المستخدمين</a><ul></ul></li>
+                <li>
+                    <a href="#" class='button is-black' style="text-align:right;" id="manageLawyersToggle">المحامين</a>
+                    <ul id="manageLawyers" class="fadeout">
+                        <li><a href="/lawyers">قائمة المحامين</a></li>
+                        <li><a href="/lawyer/create">أضافة المحامى</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class='button is-black' style="text-align:right;" id="manageCasesToggle">قضايا المكتب</a>
+                    <ul id="manageCases" class="fadeout">
+                        <li><a href="/case/create">أضافة قضية جديدة</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class='button is-black' style="text-align:right;" id="manageSessionsToggle">الجلسات</a>
+                    <ul id="manageSessions" class="fadeout">
+                        <li><a href="/sessions">قائمة الجلسات</a></li>
+                        <li><a href="/session/create">أضافة جلسة جديدة</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class='button is-black' style="text-align:right;" id="managePowersToggle">التوكيلات</a>
+                    <ul id="managePowers" class="fadeout">
+                        <li><a href="/powers">قائمة التوكيلات</a></li>
+                        <li><a href="/power/create">أضافة التوكيل جديدة</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class='button is-black' style="text-align:right;" id="manageTasksToggle">المهام</a>
+                    <ul id="manageTasks" class="fadeout">
+                        <li><a href="/tasks">قائمة المهمات</a></li>
+                        <li><a href="/task/create">أضافة مهمة جديدة</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <h2 style="margin-bottom:15px;font-size:1.3em;font-family:Arial, Helvetica, sans-serif">
+                ادارة العملاء
+            </h2>
+            <ul class="menu-list">
+                <li>
+                    <a href="#" class='button is-black' style="text-align:right;" id="manageClientsToggle">العملاء</a>
+                    <ul id="manageClients" class="fadeout">
+                        <li><a href="/clients">قائمة العملاء</a></li>
+                        <li><a href="/client/create">أضافة العملاء</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class='button is-black' style="text-align:right;" id="manageInvoicesmanage">المعاملات المالية</a>
+                    <ul id="manageInvoice" class="fadeout">
+                        <li><a href="/clients">الفواتير</a></li>
+                        <li><a href="/client/create">أضافة فاتورة جديدة</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <section class="section">
+            <div class="container">
+                  {{block "content" .}} {{end}}
+            </div>
+        </section> 
+    </div>
+
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('mainContent').classList.toggle('collapsed');
+        });
+
+        document.getElementById('manageClientsToggle').addEventListener('click', function() {
+            const manageClients = document.getElementById('manageClients');
+            if (manageClients.classList.contains('fadeout')) {
+                manageClients.classList.remove('fadeout');
+                manageClients.classList.add('fadein');
+            } else {
+                manageClients.classList.remove('fadein');
+                manageClients.classList.add('fadeout');
+            }
+        });
+
+        document.getElementById('manageLawyersToggle').addEventListener('click', function() {
+            const manageLawyers = document.getElementById('manageLawyers');
+            if (manageLawyers.classList.contains('fadeout')) {
+                manageLawyers.classList.remove('fadeout');
+                manageLawyers.classList.add('fadein');
+            } else {
+                manageLawyers.classList.remove('fadein');
+                manageLawyers.classList.add('fadeout');
+            }
+        });
+
+        document.getElementById('manageCasesToggle').addEventListener('click', function() {
+            const manageCases = document.getElementById('manageCases');
+            if (manageCases.classList.contains('fadeout')) {
+                manageCases.classList.remove('fadeout');
+                manageCases.classList.add('fadein');
+            } else {
+                manageCases.classList.remove('fadein');
+                manageCases.classList.add('fadeout');
+            }
+        });
+
+        document.getElementById('manageSessionsToggle').addEventListener('click', function() {
+            const manageSessions = document.getElementById('manageSessions');
+            if (manageSessions.classList.contains('fadeout')) {
+                manageSessions.classList.remove('fadeout');
+                manageSessions.classList.add('fadein');
+            } else {
+                manageSessions.classList.remove('fadein');
+                manageSessions.classList.add('fadeout');
+            }
+        });
+
+        document.getElementById('managePowersToggle').addEventListener('click', function() {
+            const manageSessions = document.getElementById('managePowers');
+            if (manageSessions.classList.contains('fadeout')) {
+                manageSessions.classList.remove('fadeout');
+                manageSessions.classList.add('fadein');
+            } else {
+                manageSessions.classList.remove('fadein');
+                manageSessions.classList.add('fadeout');
+            }
+        });
+
+        document.getElementById('manageInvoicesmanage').addEventListener('click', function() {
+            const manageSessions = document.getElementById('manageInvoice');
+            if (manageSessions.classList.contains('fadeout')) {
+                manageSessions.classList.remove('fadeout');
+                manageSessions.classList.add('fadein');
+            } else {
+                manageSessions.classList.remove('fadein');
+                manageSessions.classList.add('fadeout');
+            }
+        });
+
+        document.getElementById('manageTasksToggle').addEventListener('click', function() {
+            const manageSessions = document.getElementById('manageTasks');
+            if (manageSessions.classList.contains('fadeout')) {
+                manageSessions.classList.remove('fadeout');
+                manageSessions.classList.add('fadein');
+            } else {
+                manageSessions.classList.remove('fadein');
+                manageSessions.classList.add('fadeout');
+            }
+        });
+    </script>
+</body>
+</html>

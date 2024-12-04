@@ -1,0 +1,144 @@
+{{define "content"}}
+    <section class="section">
+        <div class="container">
+            <h1 class="title has-text-centered">جدول المحامين</h1>
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input class="input" type="text" id="searchInput" placeholder="Search lawyers...">
+                    <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>اسم الاول</th>
+                        <th>اسم الاخير</th>
+                        <th>الايميل</th>
+                        <th>التليفون</th>
+                        <th>درجة التقاضى</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="lawyersTable">
+                    <!-- Lawyer rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <nav class="pagination" role="navigation" aria-label="pagination">
+                <a class="pagination-previous" id="prevPage">السابق</a>
+                <a class="pagination-next" id="nextPage">اللاحق</a>
+                <ul class="pagination-list" id="paginationList">
+                    <!-- Pagination items will be inserted here by JavaScript -->
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <script>
+        const lawyers = [
+            { id: 1, firstName: 'John', lastName: 'Doe', email: 'john@example.com', phone: '123-456-7890', specialization: 'Criminal Law' },
+            { id: 2, firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', phone: '123-456-7890', specialization: 'Family Law' },
+            { id: 3, firstName: 'Jim', lastName: 'Beam', email: 'jim@example.com', phone: '123-456-7890', specialization: 'Corporate Law' },
+            { id: 4, firstName: 'Jack', lastName: 'Daniels', email: 'jack@example.com', phone: '123-456-7890', specialization: 'Civil Rights Law' },
+            { id: 5, firstName: 'Johnny', lastName: 'Walker', email: 'johnny@example.com', phone: '123-456-7890', specialization: 'Environmental Law' },
+            { id: 6, firstName: 'Jameson', lastName: 'Irish', email: 'jameson@example.com', phone: '123-456-7890', specialization: 'Intellectual Property Law' },
+            { id: 7, firstName: 'Jose', lastName: 'Cuervo', email: 'jose@example.com', phone: '123-456-7890', specialization: 'Labor Law' },
+            { id: 8, firstName: 'Captain', lastName: 'Morgan', email: 'captain@example.com', phone: '123-456-7890', specialization: 'Tax Law' },
+            { id: 9, firstName: 'Evan', lastName: 'Williams', email: 'evan@example.com', phone: '123-456-7890', specialization: 'Real Estate Law' },
+            { id: 10, firstName: 'Wild', lastName: 'Turkey', email: 'wild@example.com', phone: '123-456-7890', specialization: 'Immigration Law' },
+            { id: 11, firstName: 'Jim', lastName: 'Beam', email: 'jim@example.com', phone: '123-456-7890', specialization: 'Corporate Law' },
+            { id: 12, firstName: 'Jack', lastName: 'Daniels', email: 'jack@example.com', phone: '123-456-7890', specialization: 'Civil Rights Law' },
+            { id: 13, firstName: 'Johnny', lastName: 'Walker', email: 'johnny@example.com', phone: '123-456-7890', specialization: 'Environmental Law' },
+            { id: 14, firstName: 'Jameson', lastName: 'Irish', email: 'jameson@example.com', phone: '123-456-7890', specialization: 'Intellectual Property Law' },
+            { id: 15, firstName: 'Jose', lastName: 'Cuervo', email: 'jose@example.com', phone: '123-456-7890', specialization: 'Labor Law' },
+            { id: 16, firstName: 'Captain', lastName: 'Morgan', email: 'captain@example.com', phone: '123-456-7890', specialization: 'Tax Law' },
+            { id: 17, firstName: 'Evan', lastName: 'Williams', email: 'evan@example.com', phone: '123-456-7890', specialization: 'Real Estate Law' },
+            { id: 18, firstName: 'Wild', lastName: 'Turkey', email: 'wild@example.com', phone: '123-456-7890', specialization: 'Immigration Law' }
+        ];
+
+        const rowsPerPage = 5;
+        let currentPage = 1;
+
+        function displayLawyers(lawyers, page = 1) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedLawyers = lawyers.slice(start, end);
+
+            const lawyersTable = document.getElementById('lawyersTable');
+            lawyersTable.innerHTML = '';
+
+            paginatedLawyers.forEach(lawyer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${lawyer.id}</td>
+                    <td>${lawyer.firstName}</td>
+                    <td>${lawyer.lastName}</td>
+                    <td>${lawyer.email}</td>
+                    <td>${lawyer.phone}</td>
+                    <td>${lawyer.specialization}</td>
+                    <td>
+                        <button class="button is-small is-info">Edit</button>
+                        <button class="button is-small is-danger">Delete</button>
+                    </td>
+                `;
+                lawyersTable.appendChild(row);
+            });
+
+            updatePagination(lawyers.length, page);
+        }
+
+        function updatePagination(totalItems, currentPage) {
+            const totalPages = Math.ceil(totalItems / rowsPerPage);
+            const paginationList = document.getElementById('paginationList');
+            paginationList.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.innerHTML = `<a class="pagination-link ${i === currentPage ? 'is-current' : ''}" data-page="${i}">${i}</a>`;
+                paginationList.appendChild(pageItem);
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredLawyers = lawyers.filter(lawyer => {
+                return (
+                    lawyer.firstName.toLowerCase().includes(searchTerm) ||
+                    lawyer.lastName.toLowerCase().includes(searchTerm) ||
+                    lawyer.email.toLowerCase().includes(searchTerm) ||
+                    lawyer.phone.toLowerCase().includes(searchTerm) ||
+                    lawyer.specialization.toLowerCase().includes(searchTerm)
+                );
+            });
+            displayLawyers(filteredLawyers, 1);
+        });
+
+        document.getElementById('paginationList').addEventListener('click', function(event) {
+            if (event.target.classList.contains('pagination-link')) {
+                const page = parseInt(event.target.getAttribute('data-page'));
+                currentPage = page;
+                displayLawyers(lawyers, currentPage);
+            }
+        });
+
+        document.getElementById('prevPage').addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayLawyers(lawyers, currentPage);
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', function() {
+            const totalPages = Math.ceil(lawyers.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayLawyers(lawyers, currentPage);
+            }
+        });
+
+        // Initial display
+        displayLawyers(lawyers, currentPage);
+    </script>
+{{end}}
